@@ -1,7 +1,46 @@
+"use client";
+
 import Image from "next/image";
 import Logo from "./assets/logo.png";
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 export default function Home() {
+  const [codigo, setCodigo] = useState("");
+  const [dataAtual, setDataAtual] = useState("");
+  const [dificuldade, setDificuldade] = useState("");
+  const [corDificuldade, setCorDificuldade] = useState("");
+
+  const handleDificuldade = (e: any) => {
+    setDificuldade(e.target.value);
+
+    if (e.target.value === "1") {
+      setCorDificuldade("bg-green-500");
+    }
+
+    if (e.target.value === "2") {
+      setCorDificuldade("bg-yellow-500");
+    }
+
+    if (e.target.value === "3") {
+      setCorDificuldade("bg-red-500");
+    }
+  };
+
+  const handleCodigoChange = (e: any) => {
+    // Garante que o valor é um número inteiro
+    const value = parseInt(e.target.value, 10);
+
+    // Se o valor é um número válido, atualiza o estado
+    if (!isNaN(value) && value >= 0 && value <= 9999) {
+      setCodigo(value.toString()); // Converte de volta para string para exibir no input
+    }
+
+    const dataAtual = new Date();
+    const dataFormatada = format(dataAtual, "dd/MM/yyyy");
+    setDataAtual(dataFormatada);
+  };
+
   return (
     <div>
       <header className="flex flex-row justify-around mt-4">
@@ -39,17 +78,38 @@ export default function Home() {
         <div className="flex flex-row justify-around items-center mt-2 mb-5">
           <p>Flexao T</p>
           <div className="bg-green-500 rounded-md pl-2 pr-2">
-            <input type="checkbox" name="easy" id="easy" className="mr-2" />
+            <input
+              type="radio"
+              name="challenge"
+              id="easy"
+              className="mr-2"
+              value="1"
+              onChange={handleDificuldade}
+            />
             <label htmlFor="easy">0-9 REPS</label>
           </div>
 
           <div className="bg-yellow-500 rounded-md pl-2 pr-2">
-            <input type="checkbox" name="medium" id="medium" className="mr-2" />
+            <input
+              type="radio"
+              name="challenge"
+              id="medium"
+              className="mr-2"
+              value="2"
+              onChange={handleDificuldade}
+            />
             <label htmlFor="medium">10-19 REPS</label>
           </div>
 
           <div className="bg-red-500 rounded-md pl-2 pr-2">
-            <input type="checkbox" name="hard" id="hard" className="mr-2" />
+            <input
+              type="radio"
+              name="challenge"
+              id="hard"
+              className="mr-2"
+              value="3"
+              onChange={handleDificuldade}
+            />
             <label htmlFor="hard">20+ REPS</label>
           </div>
         </div>
@@ -61,9 +121,11 @@ export default function Home() {
             <div className="flex flex-row">
               <h3 className="mr-3 text-black">Senha</h3>
               <input
-                type="text"
+                type="number"
                 placeholder="0000"
-                className="w-14 pl-2 pr-2 text-center mr-3 rounded-md"
+                value={codigo}
+                className="w-14 pl-2 pr-2 text-center text-black mr-3 rounded-md"
+                onChange={handleCodigoChange}
               />
             </div>
           </div>
@@ -95,7 +157,13 @@ export default function Home() {
                 <label className="mr-3" htmlFor="level">
                   Dificuldade:
                 </label>
-                <select name="level" id="level" className="w-10 bg-green-500">
+                <select
+                  name="level"
+                  id="level"
+                  className={`w-10 ${corDificuldade}`}
+                  value={dificuldade}
+                  onChange={handleDificuldade}
+                >
                   <option value="1" className="w-2 h-2">
                     1
                   </option>
@@ -106,7 +174,72 @@ export default function Home() {
             </div>
 
             <div className="flex flex-row justify-between">
-              <p className="ml-2 mr-5">Quadril</p>
+              {dificuldade === "1" ? (
+                <p className="ml-2 mr-5">Quadril</p>
+              ) : dificuldade === "2" ? (
+                <p className="ml-2 mr-5">Coxa</p>
+              ) : dificuldade === "3" ? (
+                <p className="ml-2 mr-5">Joelho</p>
+              ) : null}
+
+              <div>
+                <input
+                  className="w-10 mr-1 rounded-md text-black"
+                  type="text"
+                />
+                <input
+                  className="w-10 mr-1 rounded-md text-black"
+                  type="text"
+                />
+                <input
+                  className="w-10 mr-1 rounded-md text-black"
+                  type="text"
+                />
+                <input
+                  className="w-10 mr-1 rounded-md text-black"
+                  type="text"
+                />
+                <input
+                  className="w-10 mr-1 rounded-md text-black"
+                  type="text"
+                />
+              </div>
+
+              <button className="">▶️</button>
+            </div>
+
+            <hr className="h-1 mt-4" />
+
+            <div className="flex flex-row justify-between">
+              <p className="ml-2">Levitation Crunches</p>
+              <div>
+                <label className="mr-3" htmlFor="level">
+                  Dificuldade:
+                </label>
+                <select
+                  name="level"
+                  id="level"
+                  className={`w-10 ${corDificuldade}`}
+                  value={dificuldade}
+                  onChange={handleDificuldade}
+                >
+                  <option value="1" className="w-2 h-2">
+                    1
+                  </option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-row justify-between">
+              {dificuldade === "1" ? (
+                <p className="ml-2 mr-5">10 Reps</p>
+              ) : dificuldade === "2" ? (
+                <p className="ml-2 mr-5">15 Reps</p>
+              ) : dificuldade === "3" ? (
+                <p className="ml-2 mr-5">20 Reps</p>
+              ) : null}
 
               <div>
                 <input
@@ -137,10 +270,11 @@ export default function Home() {
             <hr className="h-1 mt-4" />
 
             <div className="flex flex-row justify-center items-end mb-2 mt-3">
-              <button className="bg-green-500 pl-10 pr-10 pt-2 pb-2 rounded-lg self-center">Salvar</button>
-              <p className="text-xs absolute right-8">27/12/2023</p>
+              <button className="bg-green-500 pl-10 pr-10 pt-2 pb-2 rounded-lg self-center">
+                Salvar
+              </button>
+              <p className="text-xs absolute right-8">{dataAtual}</p>
             </div>
-            
           </div>
         </div>
       </div>
